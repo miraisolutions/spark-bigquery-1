@@ -31,7 +31,6 @@ libraryDependencies ++= Seq(
   "com.google.cloud.bigdataoss" % "bigquery-connector" % "0.10.2-hadoop2"
     exclude ("com.google.guava", "guava-jdk5"),
   "org.slf4j" % "slf4j-simple" % "1.7.21",
-  "joda-time" % "joda-time" % "2.9.3",
   "org.scalatest" %% "scalatest" % "2.2.1" % "test"
 )
 

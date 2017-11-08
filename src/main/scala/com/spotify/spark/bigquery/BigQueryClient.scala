@@ -19,6 +19,8 @@ package com.spotify.spark.bigquery
 
 import java.util.UUID
 import java.util.concurrent.TimeUnit
+import java.time.Instant
+import java.time.format.DateTimeFormatter
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
 import com.google.api.client.googleapis.json.GoogleJsonResponseException
@@ -28,10 +30,9 @@ import com.google.api.services.bigquery.model._
 import com.google.api.services.bigquery.{Bigquery, BigqueryScopes}
 import com.google.cloud.hadoop.io.bigquery._
 import com.google.common.cache.{CacheBuilder, CacheLoader, LoadingCache}
+
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.util.Progressable
-import org.joda.time.Instant
-import org.joda.time.format.DateTimeFormat
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConverters._
@@ -97,7 +98,7 @@ private[bigquery] class BigQueryClient(conf: Configuration) {
   private val PRIORITY = if (inConsole) "INTERACTIVE" else "BATCH"
   private val TABLE_ID_PREFIX = "spark_bigquery"
   private val JOB_ID_PREFIX = "spark_bigquery"
-  private val TIME_FORMATTER = DateTimeFormat.forPattern("yyyyMMddHHmmss")
+  private val TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
 
   /**
    * Perform a BigQuery SELECT query and save results to a temporary table.
@@ -163,7 +164,7 @@ private[bigquery] class BigQueryClient(conf: Configuration) {
   }
 
   private def temporaryTable(location: String): TableReference = {
-    val now = Instant.now().toString(TIME_FORMATTER)
+    val now = TIME_FORMATTER.format(Instant.now)
     val tableId = TABLE_ID_PREFIX + "_" + now + "_" + Random.nextInt(Int.MaxValue)
     new TableReference()
       .setProjectId(projectId)

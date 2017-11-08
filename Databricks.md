@@ -40,8 +40,7 @@ assemblyJarName := "uber-SampleInDatabricks-1.0-SNAPSHOT.jar"
 libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-core" % "2.0.0" % "provided",
   "org.apache.spark" %% "spark-streaming" % "2.0.0" % "provided",
-  "org.apache.spark" %% "spark-sql" % "2.0.0" % "provided",
-  "joda-time" % "joda-time" % "2.9.6"
+  "org.apache.spark" %% "spark-sql" % "2.0.0" % "provided"
 )
 
 // META-INF discarding
