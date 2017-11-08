@@ -19,7 +19,7 @@ package com.spotify.spark.bigquery
 
 import java.util.UUID
 import java.util.concurrent.TimeUnit
-import java.time.Instant
+import java.time.{Instant, ZoneId}
 import java.time.format.DateTimeFormatter
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
@@ -98,7 +98,8 @@ private[bigquery] class BigQueryClient(conf: Configuration) {
   private val PRIORITY = if (inConsole) "INTERACTIVE" else "BATCH"
   private val TABLE_ID_PREFIX = "spark_bigquery"
   private val JOB_ID_PREFIX = "spark_bigquery"
-  private val TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
+  private val timeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
+    .withZone(ZoneId.systemDefault)
 
   /**
    * Perform a BigQuery SELECT query and save results to a temporary table.
@@ -164,7 +165,7 @@ private[bigquery] class BigQueryClient(conf: Configuration) {
   }
 
   private def temporaryTable(location: String): TableReference = {
-    val now = TIME_FORMATTER.format(Instant.now)
+    val now = timeFormatter.format(Instant.now)
     val tableId = TABLE_ID_PREFIX + "_" + now + "_" + Random.nextInt(Int.MaxValue)
     new TableReference()
       .setProjectId(projectId)
